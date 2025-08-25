@@ -7,6 +7,7 @@ namespace LuminescentGem\Saqs\Parser;
 use LuminescentGem\Saqs\Exception\BadConditionException;
 use LuminescentGem\Saqs\Exception\BadOperandException;
 use LuminescentGem\Saqs\Exception\BadOperatorException;
+use LuminescentGem\Saqs\Exception\InvalidConditionException;
 use LuminescentGem\Saqs\Exception\SyntaxException;
 use LuminescentGem\Saqs\Factory\OperandFactoryInterface;
 use LuminescentGem\Saqs\Factory\OperatorFactoryInterface;
@@ -15,6 +16,7 @@ use LuminescentGem\Saqs\Factory\SimpleOperatorFactory;
 use LuminescentGem\Saqs\Model\Condition;
 use LuminescentGem\Saqs\Model\ConditionCollection;
 use LuminescentGem\Saqs\Model\OperatorInterface;
+use LuminescentGem\Saqs\Validator\ConditionValidatorInterface;
 
 class Parser
 {
@@ -23,6 +25,7 @@ class Parser
     public function __construct(
         private readonly OperandFactoryInterface $operandFactory = new SimpleOperandFactory(),
         private readonly OperatorFactoryInterface $operatorFactory = new SimpleOperatorFactory(),
+        private readonly ?ConditionValidatorInterface $conditionValidator = null
     ) {
         $this->pattern = $this->generatePattern();
     }
@@ -44,13 +47,22 @@ class Parser
         $conditions = [];
         foreach ($matches[0] as $i => $match) {
             try {
-                $conditions[] = match (false) {
+                $condition = match (false) {
                     empty($matches[1][$i]) => $this->parseCondition($matches[1][$i]),
                     empty($matches[2][$i]) => $this->parseCondition($matches[2][$i]),
                     empty($matches[3][$i]) => $this->parseCondition('_:' . $matches[3][$i]),
                     empty($matches[4][$i]) => $this->parseCondition('_:' . $matches[4][$i]),
                     false => throw new \LogicException('Empty query match!'),
                 };
+
+                if ($this->conditionValidator instanceof ConditionValidatorInterface) {
+                    $errors = $this->conditionValidator->validateCondition($condition);
+                    if (! empty($errors)) {
+                        throw new InvalidConditionException($errors);
+                    }
+                }
+
+                $conditions[] = $condition;
             } catch (SyntaxException $e) {
                 throw new BadConditionException($match, previous: $e);
             }

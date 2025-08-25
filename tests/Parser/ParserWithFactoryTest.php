@@ -82,7 +82,7 @@ final class OperandFactory implements OperandFactoryInterface
     }
 }
 
-class ParserWithContextTest extends TestCase
+class ParserWithFactoryTest extends TestCase
 {
     /**
      * @return array<array{string, ?class-string<\Throwable>}>
