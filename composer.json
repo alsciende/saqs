@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "LuminescentGem\\Saqs\\": "src/",
+            "LuminescentGem\\Saqs\\": "src/"
         }
     },
     "autoload-dev": {
