@@ -7,9 +7,9 @@ namespace LuminescentGem\Saqs\Model;
 class Condition implements \JsonSerializable
 {
     public function __construct(
-        private string $value,
-        private string $operand,
+        private OperandInterface $operand,
         private OperatorInterface $operator,
+        private string $value,
     ) {
     }
 
@@ -18,7 +18,7 @@ class Condition implements \JsonSerializable
         return $this->value;
     }
 
-    public function getOperand(): string
+    public function getOperand(): OperandInterface
     {
         return $this->operand;
     }
@@ -31,7 +31,7 @@ class Condition implements \JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [
-            'operand' => $this->operand,
+            'operand' => $this->operand->getValue(),
             'operator' => $this->operator->getValue(),
             'value' => $this->value,
         ];

@@ -16,7 +16,7 @@ final class Validator implements ConditionValidatorInterface
 {
     public function validateCondition(Condition $condition): array
     {
-        if (! in_array($condition->getOperand(), ['p'])
+        if (! in_array($condition->getOperand()->getValue(), ['p'])
          && in_array($condition->getOperator()->getValue(), ['<', '>'])) {
             return ['Numeric operator with a non-numeric operand.'];
         }

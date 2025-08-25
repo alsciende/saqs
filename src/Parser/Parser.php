@@ -122,6 +122,6 @@ class Parser
             throw new BadOperatorException($operatorValue, $operand->getValue(), previous: $e);
         }
 
-        return new Condition($value, $operand->getValue(), $operator);
+        return new Condition($operand, $operator, $value);
     }
 }
