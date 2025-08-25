@@ -1,3 +1,6 @@
+composer-validate:
+	composer validate
+
 phpunit:
 	php vendor/bin/phpunit
 
@@ -7,4 +10,4 @@ phpstan:
 ecs:
 	php vendor/bin/ecs --fix
 
-ci: ecs phpstan phpunit
+ci: composer-validate ecs phpstan phpunit
