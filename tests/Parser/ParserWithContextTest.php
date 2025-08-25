@@ -102,10 +102,10 @@ class ParserWithContextTest extends TestCase
     #[DataProvider('parserProvider')]
     public function testParser(string $query, ?string $exception): void
     {
-        $parser = new Parser([
-            'operator_factory' => new OperatorFactory(),
-            'operand_factory' => new OperandFactory(),
-        ]);
+        $parser = new Parser(
+            operandFactory: new OperandFactory(),
+            operatorFactory: new OperatorFactory()
+        );
 
         if ($exception !== null) {
             $this->expectException($exception);

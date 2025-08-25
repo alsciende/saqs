@@ -20,27 +20,10 @@ class Parser
 {
     private string $pattern;
 
-    private OperatorFactoryInterface $operatorFactory;
-
-    private OperandFactoryInterface $operandFactory;
-
-    /**
-     * @param array<string, mixed> $context
-     */
-    public function __construct(array $context = [])
-    {
-        if (isset($context['operator_factory']) && $context['operator_factory'] instanceof OperatorFactoryInterface) {
-            $this->operatorFactory = $context['operator_factory'];
-        } else {
-            $this->operatorFactory = new SimpleOperatorFactory();
-        }
-
-        if (isset($context['operand_factory']) && $context['operand_factory'] instanceof OperandFactoryInterface) {
-            $this->operandFactory = $context['operand_factory'];
-        } else {
-            $this->operandFactory = new SimpleOperandFactory();
-        }
-
+    public function __construct(
+        private readonly OperandFactoryInterface $operandFactory = new SimpleOperandFactory(),
+        private readonly OperatorFactoryInterface $operatorFactory = new SimpleOperatorFactory(),
+    ) {
         $this->pattern = $this->generatePattern();
     }
 
