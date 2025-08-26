@@ -27,6 +27,7 @@ class ParserTest extends TestCase
             ['y>1950', '[{"operand":"y","operator":">","value":"1950"}]'],
             ['y<2000', '[{"operand":"y","operator":"<","value":"2000"}]'],
             ['y!1999', '[{"operand":"y","operator":"!","value":"1999"}]'],
+            ['c:Paris y!1999', '[{"operand":"c","operator":":","value":"Paris"},{"operand":"y","operator":"!","value":"1999"}]'],
         ];
     }
 
